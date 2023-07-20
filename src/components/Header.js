@@ -4,7 +4,7 @@ import React from 'react'
 const Header = () => {
     return (
         <View>
-            <Text style={styles.text}>Planificador de Gastos</Text>
+            <Text style={styles.text}>Budget Planning</Text>
 
         </View>
     )

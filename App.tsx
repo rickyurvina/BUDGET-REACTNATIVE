@@ -15,21 +15,27 @@ import {
   Text,
   useColorScheme,
   View,
-  Alert
+  Alert,
+  Pressable,
+  Image,
+  Modal
 } from 'react-native';
 
 import Header from './src/components/Header'
 import NewBudget from './src/components/NewBudget';
 import ControlBudget from './src/components/ControlBudget';
+import FormSpent from './src/components/FormSpent';
 
 function App(): JSX.Element {
 
   const [isValidBudget, setIsValidBudget] = useState(false)
+  const [budget, setBudget] = useState(0)
+  const [expenses, setExpenses] = useState([])
+  const [modal, setModal] = useState(false)
 
-  const handleNewBudget = (budget) => {
+  const handleNewBudget = (budget: string) => {
     if (Number(budget) > 0) {
       setIsValidBudget(true)
-
 
     } else {
       Alert.alert('Error', 'Budget must be greater than 0', [{ text: 'OK' }])
@@ -43,14 +49,42 @@ function App(): JSX.Element {
         <Header />
         {isValidBudget ?
 
-          <ControlBudget /> :
+          <ControlBudget
+            budget={budget}
+            expenses={expenses}
+          /> :
 
           <NewBudget
             handleNewBudget={handleNewBudget}
+            budget={budget}
+            setBudget={setBudget}
           />
         }
 
       </View>
+
+      {modal && (
+        <Modal
+          animationType='slide'
+          visible={modal}
+        >
+          <FormSpent 
+          
+          />
+
+        </Modal>
+
+      )}
+      {isValidBudget && (
+        <Pressable
+          onPress={() => setModal(!modal)}
+        >
+          <Image
+            style={styles.image}
+            source={require('./src/assets/img/nuevo-gasto.png')}
+          />
+        </Pressable>
+      )}
 
 
     </SafeAreaView>
@@ -64,6 +98,13 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#3B82F6"
+  },
+  image: {
+    width: 60,
+    height: 60,
+    position: 'absolute',
+    top: 150,
+    right: 18
   }
 
 });

@@ -1,16 +1,18 @@
 import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
+import globalStyles from '../assets/styles'
 
-const NewBudget = ({ handleNewBudget }) => {
-
-    const [budget, setBudget] = useState(0)
+const NewBudget = ({
+    handleNewBudget,
+    budget,
+    setBudget }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>Definir Presupuesto</Text>
+            <Text style={styles.label}>Establish Budget</Text>
             <TextInput
                 keyboardType='numeric'
-                placeholder='Agrega tu presupuesto: Ej. 300'
+                placeholder='Add your budget Ej. 300'
                 style={styles.input}
                 value={budget.toString()}
                 onChangeText={setBudget}
@@ -20,9 +22,8 @@ const NewBudget = ({ handleNewBudget }) => {
                 onPress={() => handleNewBudget(budget)}
             >
                 <Text style={styles.btnTxt}>
-                    Agregar Presupuesto
+                    Add Budget
                 </Text>
-
             </Pressable>
         </View>
     )
@@ -32,20 +33,7 @@ export default NewBudget
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#FFF",
-        marginHorizontal: 10,
-        borderRadius: 10,
-        paddingVertical: 40,
-        paddingHorizontal: 20,
-        transform: [{ translateY: 50 }],
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.27,
-        shadowRadius: 4.65,
-        elevation: 6,
+        ...globalStyles.container
     },
     label: {
         textAlign: 'center',
