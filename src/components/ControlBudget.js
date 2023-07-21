@@ -13,10 +13,8 @@ const ControlBudget = ({
         console.log(expenses)
         const totalExpenses = expenses.reduce((total, spent) => Number(spent.amount) + total, 0)
         const totalAvailable = budget - totalExpenses
-
         setSpent(totalExpenses)
         setAvailable(totalAvailable)
-
     }, [])
 
     return (

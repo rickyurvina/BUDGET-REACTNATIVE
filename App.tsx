@@ -34,6 +34,7 @@ function App(): JSX.Element {
   const [budget, setBudget] = useState(0)
   const [expenses, setExpenses] = useState([])
   const [modal, setModal] = useState(false)
+  const [expense, setExpense] = useState({})
 
   const handleNewBudget = (budget: string) => {
     if (Number(budget) > 0) {
@@ -44,15 +45,26 @@ function App(): JSX.Element {
     }
   }
 
-  const handleSpent = (expense) => {
+  const handleSpent = expense => {
 
-    if (Object.values(expense).includes('')) {
+    if ([expense.nameSpent, expense.amountSpent, expense.categorySpent].includes('')) {
       Alert.alert('Error', 'All fields are required', [{ text: 'OK' }])
       return
     }
-    expense.id = generateId()
-    setExpenses([...expenses, expense])
+    if (expense.id) {
+
+      const expensesUpdated = expenses.map(item => item.id === expense.id ? expense : item)
+      setExpenses(expensesUpdated)
+
+
+    } else {
+      expense.id = generateId()
+      expense.date = Date.now()
+      setExpenses([...expenses, expense])
+    }
+
     setModal(!modal)
+    setExpense({})
 
   }
 
@@ -81,6 +93,8 @@ function App(): JSX.Element {
         {isValidBudget && (
           <BudgetList
             expenses={expenses}
+            setModal={setModal}
+            setExpense={setExpense}
 
           />
         )}
@@ -97,6 +111,8 @@ function App(): JSX.Element {
           <FormSpent
             setModal={setModal}
             handleSpent={handleSpent}
+            expense={expense}
+            setExpense={setExpense}
           />
 
         </Modal>

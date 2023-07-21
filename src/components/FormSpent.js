@@ -1,24 +1,44 @@
 import { StyleSheet, Text, View, TextInput, SafeAreaView, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import globalStyles from '../assets/styles'
 
-const FormSpent = ({ setModal, handleSpent }) => {
+const FormSpent = ({ 
+    setModal, 
+    handleSpent, 
+    expense, 
+    setExpense }) => {
     const [nameSpent, setNameSpent] = useState('')
     const [amountSpent, setAmountSpent] = useState('0')
     const [categorySpent, setCategorySpent] = useState('')
+    const[id, setId] = useState('')
+    const[date, setDate] = useState('')
+
+    useEffect(() => {
+        if (expense?.nameSpent) {
+            setNameSpent(expense.nameSpent)
+            setAmountSpent(expense.amountSpent)
+            setCategorySpent(expense.categorySpent)
+            setId(expense.id)
+            setDate(expense.date)
+        }
+    }, [expense])
+
     return (
         <SafeAreaView style={styles.container}>
             <View>
                 <Pressable
                     style={styles.btnCancel}
-                    onPress={() => setModal(false)}
+                    onPress={() => {
+                        setModal(false)
+                        setExpense({})
+                    }}
                 >
                     <Text style={styles.txtCancel}>Cancel</Text>
                 </Pressable>
             </View>
             <View style={styles.form}>
-                <Text style={styles.title}>New Spent</Text>
+                <Text style={styles.title}>{expense?.nameSpent? 'Edit Spent':'New Spent'}</Text>
 
                 <View style={styles.field}>
                     <Text style={styles.label}>Name Spent</Text>
@@ -47,6 +67,7 @@ const FormSpent = ({ setModal, handleSpent }) => {
                     >
                         <Picker.Item label="-- Select --" value="" />
                         <Picker.Item label="Saves" value="saves" />
+                        <Picker.Item label="Home" value="home" />
                         <Picker.Item label="Food" value="food" />
                         <Picker.Item label="Health" value="health" />
                         <Picker.Item label="Education" value="education" />
@@ -55,9 +76,9 @@ const FormSpent = ({ setModal, handleSpent }) => {
                 </View>
                 <Pressable
                     style={styles.submitBtn}
-                    onPress={() => { handleSpent({nameSpent, amountSpent, categorySpent}) }}
+                    onPress={() => { handleSpent({ nameSpent, amountSpent, categorySpent, id, date }) }}
                 >
-                    <Text style={styles.submitTxt}>Add Spent</Text>
+                    <Text style={styles.submitTxt}>{expense?.nameSpent? 'Update Spent':'Add Spent'}</Text>
                 </Pressable>
             </View>
 

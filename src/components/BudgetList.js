@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import Expense from './Expense'
 
-const BudgetList = ({ expenses }) => {
+const BudgetList = ({ expenses,setModal,setExpense }) => {
     useEffect(() => {
 
         console.log({ expenses })
@@ -14,12 +14,13 @@ const BudgetList = ({ expenses }) => {
             {expenses.length === 0 ?
                 <Text style={styles.noExpenses}>No expenses</Text>
                 :
-
                 expenses.map(expense => (
                     <Expense
                         style={styles.expense}
                         key={expense.id}
                         expense={expense}
+                        setModal={setModal}
+                        setExpense={setExpense}
                     >
                     </Expense>
                 )
