@@ -38,12 +38,14 @@ const FormSpent = ({
                     <Text style={styles.textBtn}>Cancel</Text>
                 </Pressable>
 
-                <Pressable
-                    style={[styles.btn, styles.btnDelete]}
-                    onPress={() =>  deleteExpense(id) }
-                >
-                    <Text style={styles.textBtn}>Delete</Text>
-                </Pressable>
+                {expense?.id &&
+                    <Pressable
+                        style={[styles.btn, styles.btnDelete]}
+                        onPress={() => deleteExpense(id)}
+                    >
+                        <Text style={styles.textBtn}>Delete</Text>
+                    </Pressable>
+                }
 
             </View>
             <View style={styles.form}>

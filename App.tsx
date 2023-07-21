@@ -27,6 +27,7 @@ import ControlBudget from './src/components/ControlBudget';
 import FormSpent from './src/components/FormSpent';
 import { generateId } from './src/helpers';
 import BudgetList from './src/components/BudgetList';
+import Filter from './src/components/Filter';
 
 function App(): JSX.Element {
 
@@ -35,6 +36,8 @@ function App(): JSX.Element {
   const [expenses, setExpenses] = useState([])
   const [modal, setModal] = useState(false)
   const [expense, setExpense] = useState({})
+  const [filter, setFilter] = useState('')
+  const [expensesFiltered, setExpensesFiltered] = useState([])
 
   const handleNewBudget = (budget: string) => {
     if (Number(budget) > 0) {
@@ -106,12 +109,22 @@ function App(): JSX.Element {
           }
         </View>
         {isValidBudget && (
-          <BudgetList
+          <>
+          <Filter
+          filter={filter}
+          setFilter={setFilter}
+          expenses={expenses}
+          setExpensesFiltered={setExpensesFiltered}
+          />
+            <BudgetList
             expenses={expenses}
             setModal={setModal}
             setExpense={setExpense}
-
+            filter={filter}
+            expensesFiltered={expensesFiltered}
           />
+          </>
+        
         )}
       </ScrollView>
 
@@ -137,6 +150,7 @@ function App(): JSX.Element {
 
       {isValidBudget && (
         <Pressable
+        style={styles.pressable}
           onPress={() => setModal(!modal)}
         >
           <Image
@@ -159,13 +173,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#3B82F6",
     minHeight: 350,
   },
-  image: {
+  pressable: {
     width: 60,
     height: 60,
     position: 'absolute',
     bottom: 40,
     right: 30
-  }
+  },
+  image: {
+    width: 60,
+    height: 60
+  },
 
 });
 

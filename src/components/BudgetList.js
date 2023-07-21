@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import Expense from './Expense'
 
-const BudgetList = ({ expenses,setModal,setExpense }) => {
+const BudgetList = ({ expenses, setModal, setExpense, filter, expensesFiltered }) => {
     useEffect(() => {
 
         console.log({ expenses })
@@ -10,21 +10,30 @@ const BudgetList = ({ expenses,setModal,setExpense }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>BudgetList</Text>
-
-            {expenses.length === 0 ?
-                <Text style={styles.noExpenses}>No expenses</Text>
-                :
-                expenses.map(expense => (
+            {
+                filter ? (expensesFiltered.map(expense => (
                     <Expense
                         style={styles.expense}
                         key={expense.id}
                         expense={expense}
                         setModal={setModal}
                         setExpense={setExpense}
-                    >
-                    </Expense>
+                    />
+                ))) : (expenses.map(expense => (
+                    <Expense
+                        style={styles.expense}
+                        key={expense.id}
+                        expense={expense}
+                        setModal={setModal}
+                        setExpense={setExpense}
+                    />
                 )
-                )}
+                ))
+            }
+
+            {expenses.length === 0 || (expensesFiltered.length === 0 && !!filter)  && 
+            <Text style={styles.noExpenses}>No expenses yet</Text>
+            }
         </View>
     )
 }
@@ -33,9 +42,9 @@ export default BudgetList
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 70,
+        marginTop: 20,
         marginBottom: 100,
-       
+
     },
     title: {
         color: "#64748B",
@@ -50,5 +59,5 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginVertical: 20,
     },
- 
+
 })
