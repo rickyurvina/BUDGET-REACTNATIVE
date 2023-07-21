@@ -3,16 +3,17 @@ import React, { useState, useEffect } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import globalStyles from '../assets/styles'
 
-const FormSpent = ({ 
-    setModal, 
-    handleSpent, 
-    expense, 
-    setExpense }) => {
+const FormSpent = ({
+    setModal,
+    handleSpent,
+    expense,
+    setExpense,
+    deleteExpense }) => {
     const [nameSpent, setNameSpent] = useState('')
     const [amountSpent, setAmountSpent] = useState('0')
     const [categorySpent, setCategorySpent] = useState('')
-    const[id, setId] = useState('')
-    const[date, setDate] = useState('')
+    const [id, setId] = useState('')
+    const [date, setDate] = useState('')
 
     useEffect(() => {
         if (expense?.nameSpent) {
@@ -26,19 +27,27 @@ const FormSpent = ({
 
     return (
         <SafeAreaView style={styles.container}>
-            <View>
+            <View style={styles.containerBtn}>
                 <Pressable
-                    style={styles.btnCancel}
+                    style={[styles.btn, styles.btnCancel]}
                     onPress={() => {
                         setModal(false)
                         setExpense({})
                     }}
                 >
-                    <Text style={styles.txtCancel}>Cancel</Text>
+                    <Text style={styles.textBtn}>Cancel</Text>
                 </Pressable>
+
+                <Pressable
+                    style={[styles.btn, styles.btnDelete]}
+                    onPress={() =>  deleteExpense(id) }
+                >
+                    <Text style={styles.textBtn}>Delete</Text>
+                </Pressable>
+
             </View>
             <View style={styles.form}>
-                <Text style={styles.title}>{expense?.nameSpent? 'Edit Spent':'New Spent'}</Text>
+                <Text style={styles.title}>{expense?.nameSpent ? 'Edit Spent' : 'New Spent'}</Text>
 
                 <View style={styles.field}>
                     <Text style={styles.label}>Name Spent</Text>
@@ -78,7 +87,7 @@ const FormSpent = ({
                     style={styles.submitBtn}
                     onPress={() => { handleSpent({ nameSpent, amountSpent, categorySpent, id, date }) }}
                 >
-                    <Text style={styles.submitTxt}>{expense?.nameSpent? 'Update Spent':'Add Spent'}</Text>
+                    <Text style={styles.submitTxt}>{expense?.nameSpent ? 'Update Spent' : 'Add Spent'}</Text>
                 </Pressable>
             </View>
 
@@ -93,13 +102,25 @@ const styles = StyleSheet.create({
         backgroundColor: "#1E40AF",
         flex: 1,
     },
-    btnCancel: {
-        backgroundColor: "#DB2777",
+    containerBtn: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+
+    },
+    btn: {
         padding: 10,
         marginTop: 30,
         marginHorizontal: 10,
+        flex: 1
+
     },
-    txtCancel: {
+    btnCancel: {
+        backgroundColor: "#DB2777",
+    },
+    btnDelete: {
+        backgroundColor: "red",
+    },
+    textBtn: {
         textTransform: 'uppercase',
         fontWeight: 'bold',
         color: "#FFF",

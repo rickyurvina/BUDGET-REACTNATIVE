@@ -68,6 +68,21 @@ function App(): JSX.Element {
 
   }
 
+  const deleteExpense = id => {
+    Alert.alert(
+      "Delete expense",
+      "Are you sure?",
+      [
+        {text: "Cancel", style: "cancel"},
+        {text: "Yes, delete", onPress: () => {
+          const expensesUpdated = expenses.filter(item => item.id !== id)
+          setExpenses(expensesUpdated)
+          setModal(!modal)
+        }},
+      ]
+    )
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -113,6 +128,7 @@ function App(): JSX.Element {
             handleSpent={handleSpent}
             expense={expense}
             setExpense={setExpense}
+            deleteExpense={deleteExpense}
           />
 
         </Modal>
