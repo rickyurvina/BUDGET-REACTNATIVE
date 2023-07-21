@@ -25,6 +25,8 @@ import Header from './src/components/Header'
 import NewBudget from './src/components/NewBudget';
 import ControlBudget from './src/components/ControlBudget';
 import FormSpent from './src/components/FormSpent';
+import { generateId } from './src/helpers';
+import BudgetList from './src/components/BudgetList';
 
 function App(): JSX.Element {
 
@@ -42,39 +44,65 @@ function App(): JSX.Element {
     }
   }
 
+  const handleSpent = (expense) => {
+
+    if (Object.values(expense).includes('')) {
+      Alert.alert('Error', 'All fields are required', [{ text: 'OK' }])
+      return
+    }
+    expense.id = generateId()
+    setExpenses([...expenses, expense])
+    setModal(!modal)
+
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Header />
-        {isValidBudget ?
+      <ScrollView>
 
-          <ControlBudget
-            budget={budget}
+        <View style={styles.header}>
+          <Header />
+          {isValidBudget ?
+
+            <ControlBudget
+              budget={budget}
+              expenses={expenses}
+            />
+            : (
+              <NewBudget
+                handleNewBudget={handleNewBudget}
+                budget={budget}
+                setBudget={setBudget}
+              />
+            )
+          }
+        </View>
+        {isValidBudget && (
+          <BudgetList
             expenses={expenses}
-          /> :
 
-          <NewBudget
-            handleNewBudget={handleNewBudget}
-            budget={budget}
-            setBudget={setBudget}
           />
-        }
-
-      </View>
+        )}
+      </ScrollView>
 
       {modal && (
         <Modal
           animationType='slide'
           visible={modal}
+          onRequestClose={() => {
+            setModal(!modal)
+          }}
         >
-          <FormSpent 
-          
+          <FormSpent
+            setModal={setModal}
+            handleSpent={handleSpent}
           />
 
         </Modal>
 
       )}
+
       {isValidBudget && (
         <Pressable
           onPress={() => setModal(!modal)}
@@ -86,7 +114,6 @@ function App(): JSX.Element {
         </Pressable>
       )}
 
-
     </SafeAreaView>
   );
 }
@@ -97,14 +124,15 @@ const styles = StyleSheet.create({
     flex: 1
   },
   header: {
-    backgroundColor: "#3B82F6"
+    backgroundColor: "#3B82F6",
+    minHeight: 350,
   },
   image: {
     width: 60,
     height: 60,
     position: 'absolute',
-    top: 150,
-    right: 18
+    bottom: 40,
+    right: 30
   }
 
 });
