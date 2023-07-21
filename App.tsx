@@ -62,7 +62,6 @@ function App(): JSX.Element {
       try {
         const expensesStorage = await AsyncStorage.getItem('expenses') 
           setExpenses(expensesStorage ? JSON.parse(expensesStorage):[])
-          console.log({ expenses })
       } catch (error) {
         console.log(error)
       }
@@ -75,7 +74,6 @@ function App(): JSX.Element {
     const saveExpensesStorage = async () => {
       try {
         await AsyncStorage.setItem('expenses', JSON.stringify(expenses))
-        console.log("guardado en AS", expenses)
       } catch (error) {
         console.log(error)
       }
