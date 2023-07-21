@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import globalStyles from '../assets/styles'
 
 const NewBudget = ({

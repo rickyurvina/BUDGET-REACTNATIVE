@@ -1,26 +1,15 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React, { useState } from 'react';
-import type { PropsWithChildren } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
   View,
   Alert,
   Pressable,
   Image,
   Modal
 } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from './src/components/Header'
 import NewBudget from './src/components/NewBudget';
 import ControlBudget from './src/components/ControlBudget';
@@ -39,10 +28,65 @@ function App(): JSX.Element {
   const [filter, setFilter] = useState('')
   const [expensesFiltered, setExpensesFiltered] = useState([])
 
+  useEffect(() => {
+    const getBudgetStorage = async () => {
+      try {
+        const budgetStorage = await AsyncStorage.getItem('budget') ?? 0
+        if (budgetStorage > 0) {
+          setBudget(Number(budgetStorage))
+          setIsValidBudget(true)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getBudgetStorage()
+  }, [])
+
+  useEffect(() => {
+    if (isValidBudget) {
+      const saveBudgetStorage = async () => {
+        try {
+          await AsyncStorage.setItem('budget', budget.toString())
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      saveBudgetStorage()
+
+    }
+  }, [isValidBudget])
+
+  useEffect(() => {
+    const getExpensesStorage = async () => {
+      try {
+        const expensesStorage = await AsyncStorage.getItem('expenses') 
+          setExpenses(expensesStorage ? JSON.parse(expensesStorage):[])
+          console.log({ expenses })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getExpensesStorage()
+  }, [])
+
+
+  useEffect(() => {
+    const saveExpensesStorage = async () => {
+      try {
+        await AsyncStorage.setItem('expenses', JSON.stringify(expenses))
+        console.log("guardado en AS", expenses)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    saveExpensesStorage()
+  }, [expenses])
+
+ 
   const handleNewBudget = (budget: string) => {
     if (Number(budget) > 0) {
       setIsValidBudget(true)
-
     } else {
       Alert.alert('Error', 'Budget must be greater than 0', [{ text: 'OK' }])
     }
@@ -76,12 +120,14 @@ function App(): JSX.Element {
       "Delete expense",
       "Are you sure?",
       [
-        {text: "Cancel", style: "cancel"},
-        {text: "Yes, delete", onPress: () => {
-          const expensesUpdated = expenses.filter(item => item.id !== id)
-          setExpenses(expensesUpdated)
-          setModal(!modal)
-        }},
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Yes, delete", onPress: () => {
+            const expensesUpdated = expenses.filter(item => item.id !== id)
+            setExpenses(expensesUpdated)
+            setModal(!modal)
+          }
+        },
       ]
     )
   }
@@ -110,21 +156,21 @@ function App(): JSX.Element {
         </View>
         {isValidBudget && (
           <>
-          <Filter
-          filter={filter}
-          setFilter={setFilter}
-          expenses={expenses}
-          setExpensesFiltered={setExpensesFiltered}
-          />
+            <Filter
+              filter={filter}
+              setFilter={setFilter}
+              expenses={expenses}
+              setExpensesFiltered={setExpensesFiltered}
+            />
             <BudgetList
-            expenses={expenses}
-            setModal={setModal}
-            setExpense={setExpense}
-            filter={filter}
-            expensesFiltered={expensesFiltered}
-          />
+              expenses={expenses}
+              setModal={setModal}
+              setExpense={setExpense}
+              filter={filter}
+              expensesFiltered={expensesFiltered}
+            />
           </>
-        
+
         )}
       </ScrollView>
 
@@ -150,7 +196,7 @@ function App(): JSX.Element {
 
       {isValidBudget && (
         <Pressable
-        style={styles.pressable}
+          style={styles.pressable}
           onPress={() => setModal(!modal)}
         >
           <Image

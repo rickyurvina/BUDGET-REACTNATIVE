@@ -3,10 +3,7 @@ import React, { useEffect } from 'react'
 import Expense from './Expense'
 
 const BudgetList = ({ expenses, setModal, setExpense, filter, expensesFiltered }) => {
-    useEffect(() => {
-
-        console.log({ expenses })
-    }, [])
+  
     return (
         <View style={styles.container}>
             <Text style={styles.title}>BudgetList</Text>
@@ -31,7 +28,7 @@ const BudgetList = ({ expenses, setModal, setExpense, filter, expensesFiltered }
                 ))
             }
 
-            {expenses.length === 0 || (expensesFiltered.length === 0 && !!filter)  && 
+            {(expenses.length === 0 || (expensesFiltered.length === 0 && !!filter))  && 
             <Text style={styles.noExpenses}>No expenses yet</Text>
             }
         </View>
