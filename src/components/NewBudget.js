@@ -34,7 +34,7 @@ export default NewBudget
 
 const styles = StyleSheet.create({
     container: {
-        ...globalStyles.container
+        ...globalStyles.container,
     },
     label: {
         textAlign: 'center',

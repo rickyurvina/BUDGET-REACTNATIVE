@@ -5,7 +5,6 @@ const Header = () => {
     return (
         <View>
             <Text style={styles.text}>Budget Planning</Text>
-
         </View>
     )
 }
@@ -22,6 +21,7 @@ const styles = StyleSheet.create({
         color: "#FFF",
         textTransform: 'uppercase',
         fontWeight: 'bold',
-        paddingTop:10
+        paddingTop:10,
+        marginBottom: -40,
     }
 })

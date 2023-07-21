@@ -130,6 +130,26 @@ function App(): JSX.Element {
     )
   }
 
+  const resetApp=()=>{
+    Alert.alert(
+      "Reset app",
+      "Are you sure?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {text: "Yes, reset", onPress: async () => { 
+          try{
+            await AsyncStorage.clear()
+            setIsValidBudget(false)
+            setBudget(0)
+            setExpenses([])
+          }catch(error){
+            console.log(error)
+          }
+        }}
+      ]
+    )
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -142,6 +162,7 @@ function App(): JSX.Element {
             <ControlBudget
               budget={budget}
               expenses={expenses}
+              resetApp={resetApp}
             />
             : (
               <NewBudget

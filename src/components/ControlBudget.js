@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import globalStyles from '../assets/styles'
 import { formatAmount } from '../helpers'
 import CircularProgress from 'react-native-circular-progress-indicator'
 const ControlBudget = ({
     budget,
-    expenses
+    expenses,
+    resetApp
 }) => {
     const [available, setAvailable] = useState(0)
     const [spent, setSpent] = useState(0)
@@ -14,7 +15,7 @@ const ControlBudget = ({
     useEffect(() => {
         const totalExpenses = expenses.reduce((total, spent) => Number(spent.amountSpent) + total, 0)
         const totalAvailable = budget - totalExpenses
-        const newPercentage =  ((totalExpenses / budget) * 100).toFixed(0)
+        const newPercentage = ((totalExpenses / budget) * 100).toFixed(0)
         setTimeout(() => {
             setPercentage(newPercentage)
         }, 1000)
@@ -35,7 +36,7 @@ const ControlBudget = ({
                     activeStrokeColor='#3B82F6'
                     activeStrokeWidth={15}
                     title='Spent'
-                    titleStyle={{fontWeight:'bold',fontSize:20}}
+                    titleStyle={{ fontWeight: 'bold', fontSize: 20 }}
                     titleColor='#64748B'
                 >
 
@@ -43,6 +44,14 @@ const ControlBudget = ({
 
             </View>
             <View style={styles.containerText}>
+                <Pressable
+                    style={styles.btn}
+                    onPress={resetApp}
+                >
+                    <Text style={styles.txtBtn}>
+                        Reset
+                    </Text>
+                </Pressable>
                 <Text style={styles.value}>
                     <Text style={styles.label}>
                         Budget:{' '}
@@ -77,10 +86,19 @@ const styles = StyleSheet.create({
     centerChart: {
         alignItems: 'center',
     },
-    chart: {
-        width: 200,
-        height: 200,
+    btn: {
+        backgroundColor: "#DB2777",
+        padding: 10,
+        marginBottom: 40,
+        borderRadius: 10,
     },
+    txtBtn: {
+        textAlign: 'center',
+        color: "#FFF",
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+    },
+
     containerText: {
         marginTop: 50,
     },
